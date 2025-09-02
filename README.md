@@ -31,60 +31,50 @@ flowchart TD
     C --> D[Sentiment Analysis + Keyword Extraction]
     D --> E[Neo4j Graph Database]
     E --> F[Flask Dashboard]
+```
 
-Steps
-1. Extract
+---
 
+## Steps
+**1. Extract**
 Input: News articles dataset (nyt_articles_subset.parquet).
-
 Sources can be extended to APIs (NewsAPI, GDELT, RSS feeds).
 
-2. Transform
-
+**2. Transform**
 Clean and normalize text.
-
 Run sentiment analysis (positive/negative/neutral).
-
 Extract brands & adjectives.
 
-3. Load
-
+**3. Load**
 Store structured articles in MongoDB.
-
 Insert brand–keyword relationships into Neo4j.
 
-4. Visualize
-
+**4. Visualize**
 Serve results in Flask dashboard.
-
 Charts: brand mentions trend, adjectives bar chart, word clouds, Neo4j graph.
 
-📊 Dashboard Features
-1. Brand Mentions Over Time
+---
 
+## Dashboard Features
+**1.** **Brand Mentions Over Time**
 Line chart showing how often a brand appears in articles over time.
-
 Helps detect sudden spikes (e.g., Adidas during World Cup).
 
-2. Top Adjectives per Brand
-
+**2.** **Top Adjectives per Brand**
 Bar chart of adjectives describing the brand.
-
 Reveals whether the tone is positive, neutral, or negative.
 
-3. Word Cloud
-
+**3.** **Word Cloud**
 Highlights the most frequent adjectives associated with the brand.
 
-4. Graph Visualization
-
+**4.** **Graph Visualization**
 Neo4j-powered graph of brands and related keywords.
 
+---
 
+## Folder Structure
 
-
-## Repository Structure
-
+```text
 brand-sentiment-etl/
 │
 ├── data/                      
@@ -108,50 +98,40 @@ brand-sentiment-etl/
 │
 ├── requirements.txt           
 └── README.md
+```
 
+---
 
-Dashboard Features
-1. Brand Mentions Over Time
+## Technologies Used
 
-Line chart showing how often a brand appears in articles over time.
+**Python** 3.9+
+**MongoDB & PyMongo** – Data storage
+**Neo4j** & **neo4j Python driver** – Graph database modeling
+**NLTK** & **spaCy** – NLP, tokenization, sentiment analysis
+**pandas** & **numpy** – Data wrangling
+**matplotlib** & **wordcloud** – Visualization
+**Flask** – Interactive web dashboard
+**HTML**/**CSS** – Frontend templates
 
-Helps detect sudden spikes (e.g., Adidas during World Cup).
+---
 
-2. Top Adjectives per Brand
-
-Bar chart of adjectives describing the brand.
-
-Reveals whether the tone is positive, neutral, or negative.
-
-3. Word Cloud
-
-Highlights the most frequent adjectives associated with the brand.
-
-4. Graph Visualization
-
-Neo4j-powered graph of brands and related keywords.
-
-
-
-
-Dataset Details
+## Dataset Details
 
 Source: NYT Articles Dataset on Kaggle
-
 Format: Parquet (nyt_articles_subset.parquet)
-
 Fields:
+    id: Unique article ID
+    headline: Article headline
+    abstract: Summary of the article
+    pub_date: Publication date
+    keywords: Tags and extracted entities
+    section_name: News section (e.g., Business, Sports)
+    lead_paragraph: Main text used for sentiment & keyword extraction
 
-id: Unique article ID
+---
 
-headline: Article headline
 
-abstract: Summary of the article
 
-pub_date: Publication date
 
-keywords: Tags and extracted entities
 
-section_name: News section (e.g., Business, Sports)
-
-lead_paragraph: Main text used for sentiment & keyword extraction
+---
