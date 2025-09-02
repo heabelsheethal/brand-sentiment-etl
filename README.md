@@ -104,39 +104,39 @@ brand-sentiment-etl/
 
 ## Technologies Used
 
-**Python** 3.9+
-**MongoDB & PyMongo** – Data storage
-**Neo4j** & **neo4j Python driver** – Graph database modeling
-**NLTK** & **spaCy** – NLP, tokenization, sentiment analysis
-**pandas** & **numpy** – Data wrangling
-**matplotlib** & **wordcloud** – Visualization
-**Flask** – Interactive web dashboard
-**HTML**/**CSS** – Frontend templates
+- **Python** 3.9+
+- **MongoDB & PyMongo** – Data storage
+- **Neo4j** & **neo4j Python driver** – Graph database modeling
+- **NLTK** & **spaCy** – NLP, tokenization, sentiment analysis
+- **pandas** & **numpy** – Data wrangling
+- **matplotlib** & **wordcloud** – Visualization
+- **Flask** – Interactive web dashboard
+- **HTML**/**CSS** – Frontend templates
 
 ---
 
 ## Dataset Details
 
-Source: NYT Articles Dataset on Kaggle
-Format: Parquet (nyt_articles_subset.parquet)
-Fields:
-    id: Unique article ID
-    headline: Article headline
-    abstract: Summary of the article
-    pub_date: Publication date
-    keywords: Tags and extracted entities
-    section_name: News section (e.g., Business, Sports)
-    lead_paragraph: Main text used for sentiment & keyword extraction
+- Source: NYT Articles Dataset on Kaggle
+- Format: Parquet (nyt_articles_subset.parquet)
+- Fields:
+- -    id: Unique article ID
+- -    headline: Article headline
+- -    abstract: Summary of the article
+- -    pub_date: Publication date
+- -    keywords: Tags and extracted entities
+- -    section_name: News section (e.g., Business, Sports)
+- -    lead_paragraph: Main text used for sentiment & keyword extraction
 
 ---
 
 ## Acknowledgements
 
 Special thanks to colleagues who helped in brainstorming and testing:
-Claire Costello
-Connor Wang
-Deheta Emma Akue
-Kai Lun Pao
+- Claire Costello
+- Connor Wang
+- Deheta Emma Akue
+- Kai Lun Pao
 
 
 
