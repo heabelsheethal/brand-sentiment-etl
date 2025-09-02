@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Brand Adjective Analysis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .section-title {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+        .wordcloud-img {
+            max-width: 100%;
+            height: auto;
+        }
+        .visual-section {
+            min-height: 200px;
+            background-color: #ffffff;
+            border: 1px dashed #ccc;
+            padding: 10px;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Left Section: Inputs -->
+        <div class="col-md-4 bg-light p-4">
+            <h2 class="text-center">Explore Brands</h2>
+
+            <!-- Brand Search -->
+            <div class="mb-4">
+                <h5 class="section-title">Search Top Adjectives by Brand</h5>
+                <form method="POST" class="form-group">
+                    <label for="brand">Brand Name:</label>
+                    <input type="text" class="form-control" name="brand" value="{{ brand }}" placeholder="e.g. nike">
+                    <button type="submit" class="btn btn-primary btn-block mt-2">Search</button>
+                </form>
+            </div>
+
+            <!-- Adjective Search -->
+            <div class="mb-4">
+                <h5 class="section-title">Find Brands Using Adjective</h5>
+                <form method="POST" class="form-group">
+                    <label for="adjective">Adjective:</label>
+                    <input type="text" class="form-control" name="adjective" value="{{ adjective }}" placeholder="e.g. innovative">
+                    <button type="submit" class="btn btn-primary btn-block mt-2">Search</button>
+                </form>
+            </div>
+
+            {% if adjective_results %}
+            <div class="mt-4">
+                <h6>Brands Using "{{ adjective }}":</h6>
+                <ul class="list-group">
+                    {% for brand in adjective_results %}
+                    <li class="list-group-item">{{ brand }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Right Section: Visualizations -->
+        <div class="col-md-8 p-4">
+            <h2 class="text-center mb-4">Brand Insights</h2>
+
+            <!-- Time Series Placeholder -->
+            <div class="visual-section">
+                <h5 class="section-title">Brand Mentions Over Time</h5>
+                <div id="time-series-chart">
+                    <!-- Future chart (e.g. using Chart.js or Plotly) will be rendered here -->
+                    <p class="text-muted">[Time series graph placeholder]</p>
+                </div>
+            </div>
+
+            <!-- Word Cloud -->
+            {% if wordcloud_image %}
+            <div class="visual-section">
+                <h5 class="section-title">Word Cloud for "{{ brand }}"</h5>
+                <img class="wordcloud-img" src="data:image/png;base64,{{ wordcloud_image }}" alt="Word Cloud">
+            </div>
+            {% endif %}
+
+            <!-- Top Adjectives -->
+            {% if brand_results %}
+            <div class="visual-section">
+                <h5 class="section-title">Top Adjectives for "{{ brand }}"</h5>
+                <ul class="list-group">
+                    {% for adj, count in brand_results %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ adj }}
+                        <span class="badge badge-primary badge-pill">{{ count }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <!-- Placeholder for future visualizations -->
+            <div class="visual-section">
+                <h5 class="section-title">More Visualizations</h5>
+                <p class="text-muted">[Add more charts or interactive visuals here]</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

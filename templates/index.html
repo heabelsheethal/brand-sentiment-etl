@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Brand Sentiment Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #e2e2e2;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: linear-gradient(to right, #f29191, #f1e3b2); /* Light elegant gradient */
+            color: #1a1a1a;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        header h1 {
+            font-size: 40px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: #1f2937;
+            margin: 0;
+        }
+
+
+        .brand-icons img {
+            width: 60px;
+            height: 50px;
+            margin-left: 5px;
+        }
+
+        main {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 10px;
+            padding: 10px 20px;
+        }
+
+        .panel {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 0px;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 20px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+
+        form input[type="text"] {
+            padding: 8px;
+            width: 60%;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        form input[type="submit"] {
+            padding: 8px 16px;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        canvas {
+            width: 100% !important;
+            height: 220px !important;
+        }
+
+        .image-full {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        ul {
+            padding-left: 10px;
+        }
+
+        footer {
+            padding: 10px 10px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 1024px) {
+            main {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Brand Sentiment Dashboard</h1>
+        <div class="brand-icons">
+            <!-- Update image paths -->
+            <img src="/static/logo/nike.png">
+            <img src="/static/logo/puma.png">
+            <img src="/static/logo/hoka.png">
+            <img src="/static/logo/luliulemon.png">
+            <img src="/static/logo/under armour.png">
+            <img src="/static/logo/reebok.png">
+            <img src="/static/logo/new balance.png">
+            <img src="/static/logo/asics.png">
+            <img src="/static/logo/adidas.png">
+        </div>
+    </header>
+
+    <main>
+        <!-- LEFT COLUMN -->
+        <div>
+            <!-- Mentions Over Time -->
+            
+            <div class="panel">
+                <h2>Mentions of {{ brand|capitalize }} Over Time</h2>
+                {% if mentions_years and mentions_counts %}
+                    <canvas id="brandTimeSeriesChart"></canvas>
+                {% else %}
+                    <p>No data available. Please enter a brand.</p>
+                {% endif %}
+            </div>
+    
+            <!-- Row: Neo4j & Placeholder 1 -->
+            <div style="display: flex; gap: 20px; margin-top: 20px;">
+                <!-- Neo4j -->
+                <div class="panel" style="flex: 1; height: 350px;">
+                    <h2>Brand Relationship Graph (Neo4j)</h2>
+                    <img src="{{ image_url }}" alt="Neo4j Graph" class="image-full" style="height: 250px; object-fit: contain;">
+                </div>
+
+                <!-- Bar chart -->
+                <div class="panel" style="flex: 1; height: 350px;">
+                    <h2>Top Adjectives: {{ brand|capitalize }} </h2>
+                    {% if bar_chart_image %}
+                        <img src="data:image/png;base64,{{ bar_chart_image }}" alt="Top Adjectives Bar Chart" class="image-full">
+                    {% else %}
+                        <p>No data available. Please enter a brand.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    
+        <!-- RIGHT COLUMN -->
+        <div>
+            <!-- Brand Analysis -->
+            <div class="panel">
+                <h2>Brand Analysis</h2>
+                <form method="POST">
+                    <input type="text" name="brand" placeholder="Enter brand name..." value="{{ brand }}">
+                    <input type="submit" value="Search">
+                </form>
+                {% if brand_results %}
+                    <h3>Common Adjectives Used for {{ brand|capitalize }}</h3>
+                    <ul>
+                        {% for adj, count in brand_results %}
+                            <li>{{ adj }} ({{ count }})</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            
+            <!-- Adj search -->
+            <div class="panel" style="margin-top: 20px;">
+                <h2>Find Brands by Adjective</h2>
+                <form method="POST">
+                    <input type="text" name="adjective_brand_search" placeholder="Enter adjective to find brands...">
+                    <input type="submit" value="Search">
+                </form>
+                {% if brands_by_adjective %}
+                    <h3>Brands Associated with This Adjective</h3>
+                    <ul>
+                        {% for brand, count in brands_by_adjective %}
+                            <li>{{ brand }} ({{ count }} mentions)</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <!-- Word Cloud -->
+            <div class="panel" style="margin-top: 20px;">
+                <h2>Word Cloud:{{ brand|capitalize }} </h2>
+                <img src="data:image/png;base64,{{ wordcloud_image }}" alt="Word Cloud" class="image-full">
+            </div>
+        </div>
+    </main>
+    
+    
+    
+
+    <!-- Bottom -->
+    <footer class="panel">
+        <h2>Search Articles by Keywords</h2>
+        <form method="POST">
+            <input type="text" name="adjective" placeholder="Enter adjective..." value="{{ adjective }}">
+            <input type="submit" value="Search">
+        </form>
+        {% if adjective_results %}
+            <h3>Articles Mentioning "{{ adjective }}"</h3>
+            <ul>
+                {% for title in adjective_results %}
+                    <li>{{ title }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </footer>
+
+    <script>
+        const years = {{ mentions_years | tojson }};
+        const counts = {{ mentions_counts | tojson }};
+
+        if (years.length > 0 && counts.length > 0) {
+            const ctx = document.getElementById('brandTimeSeriesChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: years,
+                    datasets: [{
+                        label: 'Mentions by Year',
+                        data: counts,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        fill: true,
+                        tension: 0.2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Year' }
+                        },
+                        y: {
+                            title: { display: true, text: 'Mentions' }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
